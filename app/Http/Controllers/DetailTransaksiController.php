@@ -47,7 +47,11 @@ class DetailTransaksiController extends Controller
 
         $data = DetailTransaksi::where('id_detail_transaksi', '=', $detail->id_detail_transaksi)->first();
 
-        return response()->json(['message' => 'Berhasil tambah detil transaksi', 'data' => $data]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil Tambah Detail Transaksi',
+            'data' => $data
+        ]);
 
         // return $this->response->successResponseData('Berhasil tambah detil transaksi', $data);
     }

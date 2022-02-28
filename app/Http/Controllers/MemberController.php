@@ -39,7 +39,8 @@ class MemberController extends Controller
         $data = Member::where('id_member', '=', $member->id_member)->first();
 
         return response()->json([
-            'message' => 'Data member berhasil di input',
+            'success' => true,
+            'message' => 'Data Member Berhasil Di Tambahkan',
             'data' => $data,
         ]);
     }
@@ -84,7 +85,8 @@ class MemberController extends Controller
         $member->save();
 
         return response()->json([
-            'message' => 'Data member berhasil diupdate'
+            'success' => true,
+            'message' => 'Data Member Berhasil Diupdate'
         ]);
     }
 
@@ -93,9 +95,15 @@ class MemberController extends Controller
         $delete = Member::where('id_member', '=', $id)->delete();
 
         if ($delete) {
-            return response()->json(['message' => 'Berhasil dihapus']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data Member Berhasil Dihapus'
+            ]);
         } else {
-            return response()->json(['message' => 'Gagal dihapus']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Member Gagal Dihapus'
+            ]);
         }
     }
 }

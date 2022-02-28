@@ -44,7 +44,11 @@ class TransaksiController extends Controller
 
         $data = Transaksi::where('id_transaksi', '=', $transaksi->id_transaksi)->first();
 
-        return response()->json(['message' => 'Data transaksi berhasil ditambahkan', 'data' => $data]);
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Transaksi Berhasil Ditambahkan',
+            'data' => $data
+        ]);
     }
 
     public function getAll()

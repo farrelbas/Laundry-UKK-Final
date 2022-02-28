@@ -34,7 +34,8 @@ class PaketController extends Controller
 
         $data = Paket::where('id_paket', '=', $paket->id_paket)->first();
         return response()->json([
-            'message' => 'Data paket berhasil di input',
+            'success' => true,
+            'message' => 'Data Paket Berhasil Di Input',
             'data' => $data,
         ]);
     }
