@@ -8,7 +8,7 @@ use Exception;
 use Tymon\JWTAuth\Http\Middleware\BaseMiddleware;
 use Illuminate\Http\Request;
 
-class JwtMiddleware extends BaseMiddleware
+class JwtMiddleware
 {
     /**
      * Handle an incoming request.
@@ -23,11 +23,11 @@ class JwtMiddleware extends BaseMiddleware
             $user = JWTAuth::parseToken()->authenticate();
         } catch (Exception $e) {
             if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenInvalidException) {
-                return $this->response->errorResponse('Token Invalid');
+                return response()->json(['message' => 'Token is invalid']);
             } else if ($e instanceof \Tymon\JWTAuth\Exceptions\TokenExpiredException) {
-                return $this->response->errorResponse('Token Expired');
+                return response()->json(['message' => 'Token is expired']);
             } else {
-                return $this->response->errorResponse('Authorization token not found');
+                return response()->json(['message' => 'Authorization token not found']);
             }
         }
 
@@ -36,6 +36,7 @@ class JwtMiddleware extends BaseMiddleware
             return $next($request);
         }
 
-        return $this->response->errorResponse('You are not authorized to access this route');
+        // return $this->response->errorResponse('You are not authorized to access this route');
+        return response()->json('You are not authorized to access this route');
     }
 }

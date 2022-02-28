@@ -31,11 +31,6 @@ class UserController extends Controller
             'token' => $token,
             'user' => $user
         ]);
-        // $data = [
-        // 	'token' => $token,
-        // 	'user'  => JWTAuth::user()
-        // ];
-        // return response()->json(['message' => 'Authentication success', 'data' => $data]);
     }
 
     public function getUser()
@@ -69,7 +64,60 @@ class UserController extends Controller
 
         $data = User::where('username', '=', $request->username)->first();
 
-        return response()->json(['message' => 'Berhasil menambah user baru', 'data' => $data]);
+        return response()->json([
+            'message' => 'Berhasil menambah user baru',
+            'data' => $data
+        ]);
+    }
+
+    public function getById($id)
+    {
+        $user = User::where('id', '=', $id)->first();
+
+        return response()->json($user);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'role' => 'required',
+            'name' => 'required',
+            'id_outlet' => 'required'
+        ]);
+
+        $user = User::where('id', '=', $id)->first();
+
+        $user->name = $request->name;
+        $user->username = $request->username;
+        $user->role = $request->role;
+        $user->id_outlet = $request->id_outlet;
+        if ($request->password != null) {
+            $user->password = Hash::make($request->password);
+        }
+
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data user berhasil diubah'
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $user = User::where('id', '=', $id)->delete();
+
+        if ($user) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Data user berhasil dihapus'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data user gagal dihapus'
+            ]);
+        }
     }
 
     public function loginCheck()
@@ -79,22 +127,54 @@ class UserController extends Controller
                 return $this->response->errorResponse('Invalid token!');
             }
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-            return $this->response->errorResponse('Token expired!');
+            return response()->json(['message' => 'Token expired!']);
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-            return $this->response->errorResponse('Invalid token!');
+            return response()->json(['message' => 'Invalid Token!']);
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-            return $this->response->errorResponse('Token absent!');
+            return response()->json(['message' => 'Token Absent']);
         }
 
-        return $this->response->successResponseData('Authentication success!', $user);
+        return response()->json(['message' => 'Authentication success!']);
     }
+
+    // public function loginCheck()
+    // {
+    //     try {
+    //         if (!$user = JWTAuth::parseToken()->authenticate()) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Invalid Token'
+    //             ]);
+    //         }
+    //     } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Token expired!'
+    //         ]);
+    //     } catch (Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Invalid Token!'
+    //         ]);
+    //     } catch (Tymon\JWTAuth\Exceptions\JWTException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Token Absent'
+    //         ]);
+    //     }
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Success'
+    //     ]);
+    // }
 
     public function logout(Request $request)
     {
         if (JWTAuth::invalidate(JWTAuth::getToken())) {
-            return $this->response->successResponse('You are logged out');
+            return response()->json(['message' => 'You are logged out']);
         } else {
-            return $this->response->errorResponse('Logged out failed');
+            return response()->json(['message' => 'Failed']);
         }
     }
 }

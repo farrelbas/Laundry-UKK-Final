@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Member;
-use JWTAuth;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class MemberController extends Controller
 {
-    // public $user;
-    // public function __construct()
-    // {
-    //     $this->user = JWTAuth::parseToken()->authenticate();
-    // }
+    public $user;
+    public function __construct()
+    {
+        $this->user = JWTAuth::parseToken()->authenticate();
+    }
 
     public function store(Request $request)
     {
@@ -45,18 +46,23 @@ class MemberController extends Controller
 
     public function getAll()
     {
-        $data['count'] = Member::count();
-        $data['member'] = Member::get();
-        return response()->json(['data' => $data]);
+        $data = Member::get();
+        return response()->json($data);
     }
 
-    public function getById($id_member)
+    public function count()
     {
-        $data['member'] = Member::where('id_member', '=', $id_member)->get();
+        $data['count'] = Member::count();
         return response()->json(['data' => $data]);
     }
 
-    public function update(Request $request, $id_member)
+    public function getById($id)
+    {
+        $data = Member::where('id_member', $id)->first();
+        return response()->json($data);
+    }
+
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string',
@@ -69,7 +75,7 @@ class MemberController extends Controller
             return response()->json($validator->errors());
         }
 
-        $member = Member::where('id_member', '=', $id_member)->first();
+        $member = Member::where('id_member', '=', $id)->first();
         $member->nama = $request->nama;
         $member->alamat = $request->alamat;
         $member->jenis_kelamin = $request->jenis_kelamin;
@@ -82,9 +88,9 @@ class MemberController extends Controller
         ]);
     }
 
-    public function delete($id_member)
+    public function delete($id)
     {
-        $delete = Member::where('id_member', '=', $id_member)->delete();
+        $delete = Member::where('id_member', '=', $id)->delete();
 
         if ($delete) {
             return response()->json(['message' => 'Berhasil dihapus']);
