@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -45,7 +46,8 @@ class UserController extends Controller
             'nama' => 'required',
             'username' => 'required',
             'password' => 'required|string|min:6',
-            'role' => 'required'
+            'role' => 'required',
+            'id_outlet' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -57,6 +59,7 @@ class UserController extends Controller
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
         $user->role     = $request->role;
+        $user->id_outlet = $request->id_outlet;
 
         $user->save();
 
@@ -65,9 +68,19 @@ class UserController extends Controller
         $data = User::where('username', '=', $request->username)->first();
 
         return response()->json([
-            'message' => 'Berhasil menambah user baru',
+            'success' => true,
+            'message' => 'Berhasil Menambah User Baru',
             'data' => $data
         ]);
+    }
+
+    public function getAll()
+    {
+        $data = DB::table('users')->join('outlet', 'users.id_outlet', '=', 'outlet.id_outlet')
+            ->select('users.*', 'outlet.id_outlet')
+            ->get();
+
+        return response()->json($data);
     }
 
     public function getById($id)
@@ -81,13 +94,13 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'role' => 'required',
-            'name' => 'required',
+            'nama' => 'required',
             'id_outlet' => 'required'
         ]);
 
         $user = User::where('id', '=', $id)->first();
 
-        $user->name = $request->name;
+        $user->nama = $request->nama;
         $user->username = $request->username;
         $user->role = $request->role;
         $user->id_outlet = $request->id_outlet;

@@ -36,8 +36,8 @@ class TransaksiController extends Controller
         $transaksi->batas_waktu = Carbon::now()->addDays(3);
         $transaksi->status = 'baru';
         $transaksi->dibayar = 'belum dibayar';
-        $transaksi->subtotal =
-            $transaksi->id = $this->user->id;
+        $transaksi->subtotal = NULL;
+        $transaksi->id = $this->user->id;
         // $transaksi->id_user = $request->id_user;
 
         $transaksi->save();
@@ -72,7 +72,7 @@ class TransaksiController extends Controller
         return response()->json($data);
     }
 
-    public function update($id_transaksi, Request $request)
+    public function update($id, Request $request)
     {
         $validator = Validator::make($request->all(), [
             'id_member' => 'required',
@@ -82,7 +82,7 @@ class TransaksiController extends Controller
             return response()->json($validator->errors());
         }
 
-        $transaksi = Transaksi::find($id_transaksi);
+        $transaksi = Transaksi::find($id);
 
         // $transaksi->id_member = $request->id_member;
 
