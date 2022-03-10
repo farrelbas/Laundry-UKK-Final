@@ -23,18 +23,17 @@ class DetailTransaksiController extends Controller
             'id_transaksi' => 'required',
             'id_paket' => 'required',
             'quantity' => 'required',
-            'subtotal' => 'required',
+            // 'subtotal' => 'required',
         ]);
 
         if ($validator->fails()) {
-            // return $this->response->errorResponse($validator->fails());
             return response()->json($validator->errors());
         }
 
         $detail = new DetailTransaksi();
         $detail->id_transaksi = $request->id_transaksi;
         $detail->id_paket = $request->id_paket;
-        $detail->subtotal = $request->subtotal;
+        // $detail->subtotal = $request->subtotal;
 
         //GET HARGA PAKET
         $paket = Paket::where('id_paket', '=', $detail->id_paket)->first();
@@ -52,8 +51,6 @@ class DetailTransaksiController extends Controller
             'message' => 'Berhasil Tambah Detail Transaksi',
             'data' => $data
         ]);
-
-        // return $this->response->successResponseData('Berhasil tambah detil transaksi', $data);
     }
 
     public function getById($id)

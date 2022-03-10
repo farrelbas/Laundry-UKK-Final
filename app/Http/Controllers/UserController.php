@@ -51,7 +51,7 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->response->errorResponse($validator->errors());
+            return response()->json($validator->errors());
         }
 
         $user = new User();
@@ -132,23 +132,6 @@ class UserController extends Controller
             ]);
         }
     }
-
-    // public function loginCheck()
-    // {
-    //     try {
-    //         if (!$user = JWTAuth::parseToken()->authenticate()) {
-    //             return $this->response->errorResponse('Invalid token!');
-    //         }
-    //     } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-    //         return response()->json(['message' => 'Token expired!']);
-    //     } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-    //         return response()->json(['message' => 'Invalid Token!']);
-    //     } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-    //         return response()->json(['message' => 'Token Absent']);
-    //     }
-
-    //     return response()->json(['message' => 'Authentication success!']);
-    // }
 
     public function loginCheck()
     {

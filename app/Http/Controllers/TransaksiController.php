@@ -84,8 +84,6 @@ class TransaksiController extends Controller
 
         $transaksi = Transaksi::find($id);
 
-        // $transaksi->id_member = $request->id_member;
-
         $transaksi->update($request->all());
 
         return response()->json(['message' => 'Transaksi berhasil diubah']);
@@ -146,5 +144,10 @@ class TransaksiController extends Controller
             ->get();
 
         return response()->json($data);
+
+        // return response()->json([
+        //     'error' => true,
+        //     'data' => $data,
+        // ]);
     }
 }

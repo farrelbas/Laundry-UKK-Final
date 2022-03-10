@@ -12,8 +12,4 @@ class Transaksi extends Model
 
     protected $fillable = ['id_member', 'tgl_order', 'batas_waktu', 'tgl_bayar', 'status', 'dibayar', 'subtotal', 'id', 'id_outlet'];
 
-    // public function detail()
-    // {
-    //     return $this->hasMany(DetilTransaksi::class,'id_transaksi', 'id');
-    // }
 }
