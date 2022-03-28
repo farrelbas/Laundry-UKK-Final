@@ -44,14 +44,7 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
     Route::get('get_outlet', [OutletController::class, 'getAll']);
     Route::get('get_outlet_id/{id}', [OutletController::class, 'getById']);
     Route::put('update_outlet/{id}', [OutletController::class, 'update']);
-    Route::delete('delete_paketoutlet/{id}', [OutletController::class, 'delete']);
-
-    //PAKET
-    Route::post('insert_paket', [PaketController::class, 'store']);
-    Route::get('get_paket', [PaketController::class, 'getAll']);
-    Route::get('get_paket_id/{id}', [PaketController::class, 'getById']);
-    Route::put('update_paket/{id}', [PaketController::class, 'update']);
-    Route::delete('delete_paket/{id}', [PaketController::class, 'delete']);
+    Route::delete('delete_outlet/{id}', [OutletController::class, 'delete']);
 
     //USER
     Route::post('insert_user', [UserController::class, 'store']);
@@ -64,6 +57,13 @@ Route::group(['middleware' => ['jwt.verify:admin']], function () {
 //Route khusus admin & kasir
 Route::group(['middleware' => ['jwt.verify:admin,kasir']], function () {
 
+    //PAKET
+    Route::post('insert_paket', [PaketController::class, 'store']);
+    Route::get('get_paket', [PaketController::class, 'getAll']);
+    Route::get('get_paket_id/{id}', [PaketController::class, 'getById']);
+    Route::put('update_paket/{id}', [PaketController::class, 'update']);
+    Route::delete('delete_paket/{id}', [PaketController::class, 'delete']);
+
     //MEMBER
     Route::post('insert_member', [MemberController::class, 'store']);
     Route::get('get_member', [MemberController::class, 'getAll']);
@@ -71,12 +71,14 @@ Route::group(['middleware' => ['jwt.verify:admin,kasir']], function () {
     Route::put('update_member/{id}', [MemberController::class, 'update']);
     Route::delete('delete_member/{id}', [MemberController::class, 'delete']);
     Route::get('count_member', [MemberController::class, 'count']);
+    Route::get("get_member/{id}", [MemberController::class, 'cari_data']);
 
     //TRANSAKSI
     Route::post('insert_transaksi', [TransaksiController::class, 'store']);
     Route::get('transaksi/{id}', [TransaksiController::class, 'getById']);
     Route::get('get_transaksi', [TransaksiController::class, 'getAll']);
     Route::put('update_transaksi/{id}', [TransaksiController::class, 'update']);
+    Route::get("get_transaksi/{id}", [TransaksiController::class, 'cari_data']);
 
     //DETAIL TRANSAKSI
     Route::post('transaksi/detail/tambah', [DetailTransaksiController::class, 'store']);
@@ -87,6 +89,9 @@ Route::group(['middleware' => ['jwt.verify:admin,kasir']], function () {
 });
 
 //Route Khusus Owner
-Route::group(['middleware' => ['jwt.verify:owner']], function () {
+Route::group(['middleware' => ['jwt.verify:owner,admin,kasir']], function () {
+
+    //REPORT
     Route::post('report', [TransaksiController::class, 'report']);
+    Route::post('jumlahPendapatan', [TransaksiController::class, 'jumlahPendapatan']);
 });

@@ -11,7 +11,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class DetailTransaksiController extends Controller
 {
-    // public $user;
+    public $user;
     public function __construct()
     {
         $this->user = JWTAuth::parseToken()->authenticate();
@@ -23,7 +23,6 @@ class DetailTransaksiController extends Controller
             'id_transaksi' => 'required',
             'id_paket' => 'required',
             'quantity' => 'required',
-            // 'subtotal' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -33,7 +32,6 @@ class DetailTransaksiController extends Controller
         $detail = new DetailTransaksi();
         $detail->id_transaksi = $request->id_transaksi;
         $detail->id_paket = $request->id_paket;
-        // $detail->subtotal = $request->subtotal;
 
         //GET HARGA PAKET
         $paket = Paket::where('id_paket', '=', $detail->id_paket)->first();

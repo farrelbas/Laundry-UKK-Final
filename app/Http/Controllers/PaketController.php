@@ -74,8 +74,8 @@ class PaketController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'jenis' => 'required|string',
-            'harga' => 'required|string',
+            'jenis' => 'required',
+            'harga' => 'required',
         ]);
 
         if ($validator->fails()) {

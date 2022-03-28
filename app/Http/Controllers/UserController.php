@@ -25,12 +25,14 @@ class UserController extends Controller
         }
 
         $user = JWTAuth::user();
+        $outlet = DB::table('outlet')->where('id_outlet', $user->id_outlet)->first();
 
         return response()->json([
             'success' => true,
             'message' => 'Login berhasil',
             'token' => $token,
-            'user' => $user
+            'user' => $user,
+            'outlet' => $outlet
         ]);
     }
 
@@ -43,7 +45,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama' => 'required',
+            'name' => 'required',
             'username' => 'required',
             'password' => 'required|string|min:6',
             'role' => 'required',
@@ -55,7 +57,7 @@ class UserController extends Controller
         }
 
         $user = new User();
-        $user->nama     = $request->nama;
+        $user->name     = $request->name;
         $user->username = $request->username;
         $user->password = Hash::make($request->password);
         $user->role     = $request->role;
@@ -77,7 +79,7 @@ class UserController extends Controller
     public function getAll()
     {
         $data = DB::table('users')->join('outlet', 'users.id_outlet', '=', 'outlet.id_outlet')
-            ->select('users.*', 'outlet.id_outlet')
+            ->select('users.*', 'outlet.nama')
             ->get();
 
         return response()->json($data);
@@ -94,13 +96,13 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'role' => 'required',
-            'nama' => 'required',
+            'name' => 'required',
             'id_outlet' => 'required'
         ]);
 
         $user = User::where('id', '=', $id)->first();
 
-        $user->nama = $request->nama;
+        $user->name = $request->name;
         $user->username = $request->username;
         $user->role = $request->role;
         $user->id_outlet = $request->id_outlet;

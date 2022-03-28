@@ -49,6 +49,16 @@ class MemberController extends Controller
     {
         $data = Member::get();
         return response()->json($data);
+
+        // $data = Member::paginate(10);
+        // return response()->json($data);
+    }
+
+    public function cari_data($key)
+    {
+        $data = Member::where('nama', 'like', '%' . $key . '%')->get();
+        $data = Member::where('alamat', 'like', '%' . $key . '%')->get();
+        return response()->json($data);
     }
 
     public function count()
