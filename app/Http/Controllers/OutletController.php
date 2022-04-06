@@ -9,6 +9,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class OutletController extends Controller
 {
+    public function getAllReg()
+    {
+        $data = Outlet::get();
+        return response()->json($data);
+    }
     public $user;
     public function __construct()
     {
@@ -44,6 +49,7 @@ class OutletController extends Controller
         $data = Outlet::get();
         return response()->json($data);
     }
+
 
     public function getById($id)
     {

@@ -26,6 +26,7 @@ use App\Http\Controllers\OutletController;
 //     return $request->user();
 // });
 
+Route::get('get_outlet_reg', [OutletController::class, 'getAllReg']);
 Route::post('register', [UserController::class, 'store']);
 Route::post('login', [UserController::class, 'login']);
 
@@ -88,7 +89,7 @@ Route::group(['middleware' => ['jwt.verify:admin,kasir']], function () {
     Route::get('transaksi/total/{id}', [DetailTransaksiController::class, 'getTotal']);
 });
 
-//Route Khusus Owner
+//Route Khusus Owner ADMIN KASIR
 Route::group(['middleware' => ['jwt.verify:owner,admin,kasir']], function () {
 
     //REPORT

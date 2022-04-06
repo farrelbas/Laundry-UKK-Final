@@ -134,7 +134,6 @@ class UserController extends Controller
             ]);
         }
     }
-
     public function loginCheck()
     {
         try {
@@ -147,25 +146,58 @@ class UserController extends Controller
         } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Token expired!'
+                'message' => 'Token Expired.',
             ]);
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid Token!'
+                'message' => 'Token invalid.',
             ]);
         } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Token Absent'
+                'message' => 'Authorization token not found.',
             ]);
         }
 
         return response()->json([
             'success' => true,
-            'message' => 'Success'
+            'message' => 'Authentication success',
+            'data' => $user
         ]);
     }
+
+    // public function loginCheck()
+    // {
+    //     try {
+    //         if (!$user = JWTAuth::parseToken()->authenticate()) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Invalid Token'
+    //             ]);
+    //         }
+    //     } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Token expired!'
+    //         ]);
+    //     } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Invalid Token!'
+    //         ]);
+    //     } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Token Absent'
+    //         ]);
+    //     }
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Success'
+    //     ]);
+    // }
 
     public function logout(Request $request)
     {
